@@ -93,51 +93,58 @@ class World():
                     for step in self.path:
                         count = count + 1
                         try:
-                            if piece == step:
-                                move = True
-                                continue
                             if not move:
+                                if piece == step:
+                                    move = True
                                 continue
                             p = piece.copy()
                             if p == step:
                                 continue
                             p.moveDown()
                             if p == step:
-                                if length - count > 2:
+                                if length - count > 0:
                                     print('down')
                                     self.nestopia.down()
-                                break
+                                    piece = p
+                                    continue
+                                else:
+                                    break
                             p = piece.copy()
                             p.moveLeft()
                             if p == step:
                                 print('left')
                                 self.nestopia.left()
-                                break
+                                piece = p
+                                continue
                             p = piece.copy()
                             p.moveRight()
                             if p == step:
                                 print('right')
                                 self.nestopia.right()
-                                break
+                                piece = p
+                                continue
                             p = piece.copy()
                             p.rotate()
                             if p == step:
                                 print('rotate 1')
                                 self.nestopia.rotate()
-                                break
+                                piece = p
+                                continue
                             p.rotate()
                             if p == step:
                                 print('rotate 2')
                                 self.nestopia.rotate()
                                 self.nestopia.rotate()
-                                break
+                                piece = p
+                                continue
                             p.rotate()
                             if p == step:
                                 print('rotate 3')
                                 self.nestopia.rotate()
                                 self.nestopia.rotate()
                                 self.nestopia.rotate()
-                                break
+                                piece = p
+                                continue
                         except StopIteration:
                             pass
 
