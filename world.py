@@ -84,12 +84,14 @@ class World():
                     print('error')
 
             if self.path is not None:
+                self.path = list(self.path)
                 piece = self.recognizePiece()
+                length = len(self.path)
                 count = 0
                 if piece is not None:
                     move = False
                     for step in self.path:
-                        count =  count + 1
+                        count = count + 1
                         try:
                             if piece == step:
                                 move = True
@@ -101,8 +103,9 @@ class World():
                                 continue
                             p.moveDown()
                             if p == step:
-                                print('down')
-                                self.nestopia.down()
+                                if length - count > 2:
+                                    print('down')
+                                    self.nestopia.down()
                                 break
                             p = piece.copy()
                             p.moveLeft()
@@ -177,14 +180,11 @@ class World():
 
         solutions = self.solutions(piece)
 
+        solutions.sort(key=lambda s: Score(self, s).get(), reverse=True)
+
         for solution in solutions:
-            score = Score(self, solution).get()
+            path = TetrisPathFinder().astar(piece, solution)
+            if path is not None:
+                return path
 
-            if best_score is None or score > best_score:
-                path = TetrisPathFinder().astar(piece, solution)
-                if path is not None:
-                    best_score = score
-                    best_solution = solution
-                    best_path = path
-
-        return best_path
+        return None
